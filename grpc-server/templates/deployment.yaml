@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "fetc-grpc.fullname" . }}
+  labels:
+{{ include "fetc-grpc.labels" . | indent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "fetc-grpc.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "fetc-grpc.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      imagePullSecrets:
+      - name: {{ include "fetc-grpc.fullname" . }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.containerPort }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+      {{- include "fetcGrpcEnv" . | nindent 12 }}
+      {{- include "svcEnvFromSecret" . | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}

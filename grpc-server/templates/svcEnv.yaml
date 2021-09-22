@@ -1,0 +1,8 @@
+{{- define "svcEnvFromSecret" -}}
+- name: ENSAAS_SERVICES
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Values.global.database.secretName }}
+      key: ENSAAS_SERVICES
+      optional: true
+{{- end -}}

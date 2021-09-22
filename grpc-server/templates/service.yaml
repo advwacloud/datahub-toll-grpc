@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "fetc-grpc.fullname" . }}
+  labels:
+{{ include "fetc-grpc.labels" . | indent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort }}
+      protocol: TCP
+      name: tcp
+  selector:
+    app.kubernetes.io/name: {{ include "fetc-grpc.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}

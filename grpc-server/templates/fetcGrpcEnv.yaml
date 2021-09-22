@@ -1,0 +1,12 @@
+{{- define "fetcGrpcEnv" -}}
+- name: DATAHUB_CONFIG
+  value: {{ .Values.envs.DATAHUB_CONFIG | quote}}
+- name: LOCAL_TIME_IN_UTC
+  value: {{ .Values.envs.LOCAL_TIME_IN_UTC | quote}}
+- name: AZURE_BLOB_CONTAINER
+  value: {{ .Values.envs.AZURE_BLOB_CONTAINER | quote}}
+- name: AZURE_BLOB_ACCOUNT_NAME
+  value: {{ .Values.envs.AZURE_BLOB_ACCOUNT_NAME | quote}}
+- name: AZURE_BLOB_ACCOUNT_KEY
+  value: {{ .Values.envs.AZURE_BLOB_ACCOUNT_KEY | quote}}
+{{- end -}}
